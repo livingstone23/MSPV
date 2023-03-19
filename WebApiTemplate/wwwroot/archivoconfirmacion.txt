@@ -1,0 +1,12 @@
+Proceso iniciado, clase ServiceContinues
+Proceso iniciado, clase ServiceContinues
+Proceso iniciado a las: 12/09/2022 05:26:31clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:26:41clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:26:41clase ServiceContinues
+Proceso iniciado a las: 12/09/2022 05:26:49clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:26:49clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:26:54clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:26:59clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:27:04clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:27:09clase ServiceContinues
+Proceso en ejecucion: 12/09/2022 05:27:14clase ServiceContinues

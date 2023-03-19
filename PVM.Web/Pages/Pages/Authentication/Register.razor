@@ -1,0 +1,91 @@
+﻿@page "/pages/authentication/register"
+@using PVM.Web.Models.Security
+@layout LoginLayout
+@inject IAuthenticationService authenticationService
+@inject NavigationManager navigationManager
+
+
+
+<MudText Typo="Typo.h4" GutterBottom="true">Registro de usuarios</MudText>
+<MudText>Si ya tienes una cuenta? <MudLink Href="/pages/authentication/login">Ingresa</MudLink></MudText>
+
+<EditForm Model="@UserForRegisteration" OnValidSubmit="RegisterUser">
+    <DataAnnotationsValidator />
+
+
+    <MudTextField Label="Name" @bind-Value="UserForRegisteration.Name" Variant="Variant.Outlined" Class="my-4" For="@(() => UserForRegisteration.Name)" />
+    <MudTextField Label="Email" @bind-Value="UserForRegisteration.Email" Variant="Variant.Outlined" Class="my-4" For="@(() => UserForRegisteration.Email)" />
+    <MudTextField Label="Password" @bind-Value="UserForRegisteration.Password" Variant="Variant.Outlined" Class="my-4" For="@(() => UserForRegisteration.Password)" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon"  InputType="InputType.Password" OnAdornmentClick="TogglePasswordVisibility" />
+    <MudTextField Label="Repeat Password" @bind-Value="UserForRegisteration.ConfirmPassword" Variant="Variant.Outlined" Class="my-4" For="@(() => UserForRegisteration.Password)" InputType="InputType.Password" />
+
+
+    <MudCardActions>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Registrarse</MudButton>
+    </MudCardActions>
+    @if (ShowRegistrationErrors)
+    {
+        <div>
+            @foreach (var error in Errors)
+            {
+                <p class="text-danger text-center">@error</p>
+            }
+        </div>
+    }
+
+</EditForm>
+
+
+
+
+@code {
+
+
+    bool PasswordVisibility;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+
+
+    //Seccion para registrar el login
+    private UserRequestDTO UserForRegisteration = new UserRequestDTO();
+
+    public bool IsProcessing { get; set; } = false;
+    public bool ShowRegistrationErrors { get; set; }
+    public IEnumerable<string> Errors { get; set; }
+
+    private async Task RegisterUser()
+    {
+        ShowRegistrationErrors = false;
+        IsProcessing = true;
+        var result = await authenticationService.RegisterUser(UserForRegisteration);
+        if (result.IsRegisterationSuccessful)
+        {
+            IsProcessing = false;
+            navigationManager.NavigateTo("/pages/authentication/login");
+        }
+        else
+        {
+            IsProcessing = false;
+            Errors = result.Errors;
+            ShowRegistrationErrors = true;
+        }
+    }
+
+    void TogglePasswordVisibility()
+    {
+        @if (PasswordVisibility)
+        {
+            PasswordVisibility = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            PasswordVisibility = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+
+}

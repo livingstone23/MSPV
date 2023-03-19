@@ -1,0 +1,105 @@
+﻿@page "/"
+@page "/pages/authentication/login"
+@using PVM.Web.Models.Security
+@using Microsoft.AspNetCore.Components
+@using System.Web
+@layout LoginLayout
+@inject IAuthenticationService authenticationService
+@inject NavigationManager navigationManager
+
+
+
+<MudText Typo="Typo.h4" GutterBottom="true">Ingresar</MudText>
+
+<MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink></MudText>
+
+
+
+<EditForm Model="@UserForAuthentication" OnValidSubmit="LoginUser">
+    <DataAnnotationsValidator />
+
+    <MudTextField Label="Email" @bind-Value="UserForAuthentication.UserName" Variant="Variant.Outlined" Class="my-4" For="@(() => UserForAuthentication.UserName)" />
+    <MudTextField Label="Password" @bind-Value="UserForAuthentication.Password" Variant="Variant.Outlined" Class="my-4" For="@(() => UserForAuthentication.Password)" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" InputType="InputType.Password" OnAdornmentClick="TogglePasswordVisibility" />
+
+    <MudCardActions>
+        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Ingresar</MudButton>
+    </MudCardActions>
+   
+    @if (ShowAuthenticationErrors)
+    {
+        <div>
+            <p class="text-danger text-center">@Errors</p>
+        </div>
+    }
+    
+
+</EditForm>
+
+<div Class="d-flex justify-space-between align-center">
+    <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
+    <MudLink Href="/pages/authentication/forgot-password">Forgot pwd?</MudLink>
+</div>
+
+
+
+
+@code {
+    string Password { get; set; } = "BMWvBPJXZu";
+
+    bool PasswordVisibility;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+
+    //Seccion para registrar el login
+    private AuthenticationDTO UserForAuthentication = new AuthenticationDTO();
+    public bool IsProcessing { get; set; } = false;
+    public bool ShowAuthenticationErrors { get; set; }
+    public string Errors { get; set; }
+    public string ReturnUrl { get; set; }
+
+    private async Task LoginUser()
+    {
+        ShowAuthenticationErrors = false;
+        IsProcessing = true;
+        var result = await authenticationService.Login(UserForAuthentication);
+        if (result.IsAuthSuccessful)
+        {
+            IsProcessing = false;
+
+            var absoluteUri = new Uri(navigationManager.Uri);
+            var queryParam = HttpUtility.ParseQueryString(absoluteUri.Query);
+            ReturnUrl = queryParam["returnUrl"];
+            if (string.IsNullOrEmpty(ReturnUrl))
+            {
+                navigationManager.NavigateTo("/personal/dashboard");
+            }
+            else
+            {
+                navigationManager.NavigateTo("/" + ReturnUrl);
+            }
+        }
+        else
+        {
+            IsProcessing = false;
+            Errors = result.ErrorMessage;
+            ShowAuthenticationErrors = true;
+        }
+    }
+
+    void TogglePasswordVisibility()
+    {
+        @if (PasswordVisibility)
+        {
+            PasswordVisibility = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            PasswordVisibility = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+}

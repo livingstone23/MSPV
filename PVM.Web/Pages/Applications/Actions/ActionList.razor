@@ -1,0 +1,54 @@
+﻿@inject IActionService actionService
+@using Microsoft.AspNetCore.Authorization
+@implements IDisposable
+@attribute [Authorize]
+
+@if (actionService.ListActions == null || actionService.ListActions.Count == 0)
+{
+    <span>@actionService.Message</span>
+}
+else
+{
+
+    <ul class="list-unstyled">
+        @foreach (var product in actionService.ListActions)
+        {
+            <li class="media my-3">
+                <div class="media-img-wrapper mr-2">
+                    <a href="/product/@product.Oid">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <a href="/product/@product.Code">
+                        <h4 class="mb-0">@product.Name</h4>
+                    </a>
+                   
+                </div>
+            </li>
+        }
+    </ul>
+
+}
+
+@code {
+
+    protected override void OnInitialized()
+    {
+
+    //await ProductService.GetProducts();
+
+    //Notifica al evento que el producto ha cambiado
+    //permite que se renderize los cambios en la lista 
+        actionService.ActionsChanged += StateHasChanged;
+
+    }
+
+
+    public void Dispose()
+    {
+
+        actionService.ActionsChanged -= StateHasChanged;
+
+    }
+
+}

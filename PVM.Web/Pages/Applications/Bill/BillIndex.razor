@@ -1,0 +1,164 @@
+﻿@page "/page/bills"
+@using PVM.Web.Services.BillService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime jsRuntime;
+@inject IBillService BillService
+
+
+<MudGrid>
+
+    <MudItem xs="12" sm="12" md="12">
+        <MudTable ServerData="@(new Func<TableState, Task<TableData<BillDto>>>(LoadTodos))" Hover="true" @ref="table">
+
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">FACTURAS</MudText>
+                <MudSpacer />
+
+                <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+
+
+
+
+            </ToolBarContent>
+
+            <HeaderContent>
+                <MudTh><MudTableSortLabel SortLabel="name_NumFactura" T="BillDto">NumFactura</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="name_FechaFactura" T="BillDto">FechaFactura</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="name_FechaEnvioCXB" T="BillDto">FechaEnvioCXB</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="name_EstadoFactura" T="BillDto">EstadoFactura</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="name_BaseImponible" T="BillDto">BaseImponible</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="name_TipoRepercutido" T="BillDto">TipoRepercutido</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="name_ImporteRepercutido" T="BillDto">ImporteRepercutido</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortLabel="name_TotalCobrar" T="BillDto">TotalCobrar</MudTableSortLabel></MudTh>
+                <MudTh></MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel="NumFactura">@context.NumFactura</MudTd>
+                <MudTd DataLabel="FechaFactura">@context.FechaFactura</MudTd>
+                <MudTd DataLabel="FechaEnvioCXB">@context.FechaEnvioCXB</MudTd>
+                <MudTd DataLabel="EstadoFactura">@context.EstadoFactura</MudTd>
+                <MudTd DataLabel="BaseImponible" Style="text-align:center">@context.BaseImponible.ToString("N2") €</MudTd>
+                <MudTd DataLabel="TipoRepercutido">@context.TipoRepercutido</MudTd>
+                <MudTd DataLabel="ImporteRepercutido" Style="text-align:center">@context.ImporteRepercutido.ToString("N2") €</MudTd>
+                <MudTd DataLabel="TotalCobrar" Style="text-align:center">@context.TotalCobrar.ToString("N2") €</MudTd>
+
+            </RowTemplate>
+
+
+            <PagerContent>
+                <MudTablePager PageSizeOptions="pageSizeOptions"></MudTablePager>
+            </PagerContent>
+
+        </MudTable>
+    </MudItem>
+</MudGrid>
+
+
+
+
+
+
+
+
+
+
+
+
+@code {
+
+    public List<BillDto> Projects;
+    public string Message { get; set; }
+
+
+    private int[] pageSizeOptions = new int[] { 10, 15, 20 };
+
+
+    private MudTable<BillDto> table;
+
+    private IEnumerable<BillDto> DataPrint = new List<BillDto>();
+
+    private string searchString = null;
+
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        table.SetRowsPerPage(10);
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+
+    public async Task<TableData<BillDto>> LoadTodos(TableState state)
+    {
+
+        BillDtoPagination response = new BillDtoPagination();
+
+
+        response = await BillService.GetByPaginationDto((state.Page + 1), state.PageSize);
+        
+
+
+        response.Data = response.Data.Where(element =>
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+                return true;
+            if (element.NumFactura.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.EstadoFactura.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if ($"{element.BaseImponible}".Contains(searchString))
+                return true;
+            if (element.TipoRepercutido.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if ($"{element.ImporteRepercutido}".Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if ($"{element.TotalCobrar}".Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            return false;
+        }).ToArray();
+        //totalItems = data.Count();
+        switch (state.SortLabel)
+        {
+            case "name_NumFactura":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.NumFactura);
+                break;
+            case "name_FechaFactura":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.FechaFactura);
+                break;
+            case "name_FechaEnvioCXB":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.FechaEnvioCXB);
+                break;
+            case "name_EstadoFactura":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.EstadoFactura);
+                break;
+            case "name_BaseImponible":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.BaseImponible);
+                break;
+            case "name_TipoRepercutido":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.TipoRepercutido);
+                break;
+            case "name_ImporteRepercutido":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.ImporteRepercutido);
+                break;
+            case "name_TotalCobrar":
+                response.Data = response.Data.OrderByDirection(state.SortDirection, o => o.TotalCobrar);
+                break;
+
+        }
+
+
+        DataPrint = response.Data;
+        return new TableData<BillDto>() { Items = response.Data, TotalItems = response.TotalRecords };
+    }
+
+
+    private void OnSearch(string text)
+    {
+        searchString = text;
+        table.ReloadServerData();
+    }
+
+
+}
