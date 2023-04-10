@@ -21,5 +21,11 @@ namespace PVM.Services.Gestpro.Services.ETramitacioService
 
 
 
+        ///// <summary>
+        ///// Method for Testing Etramitacio
+        ///// </summary>
+        ///// <param name="eTramitacio"></param>
+        //void AddEtramitacio(ETramitacioDto eTramitacio);
+
     }
 }

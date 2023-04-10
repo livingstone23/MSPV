@@ -46,7 +46,7 @@ namespace PVM.Services.Gestpro
             //Conexion a la DB
             //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-                _configuration.GetConnectionString("DefaultConnection2")
+                _configuration.GetConnectionString("DefaultConnection")
             ));
 
             //lcano - 07.02 en la configuracion del Identity, para que se reconozca el servicio y trabajar con roles

@@ -34,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVM.Gateway", "PVM.Gateway\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVM.Service.Gestpro", "PVM.Services.Gestpro\PVM.Service.Gestpro.csproj", "{0510FF4C-C735-474D-9060-9556D5D5F143}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVM.Service.SFTP", "PVM.Service.SFTP\PVM.Service.SFTP.csproj", "{62349707-B353-4A29-868D-76BAF030B871}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVM.Service.SFTP", "PVM.Service.SFTP\PVM.Service.SFTP.csproj", "{62349707-B353-4A29-868D-76BAF030B871}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

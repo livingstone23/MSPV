@@ -108,10 +108,11 @@ namespace PVM.Services.Gestpro.Services.ETramitacioService
             }
         }
 
+        //public void AddEtramitacio(ETramitacioDto eTramitacio)
+        //{
 
-
-
-
-
+        //    var dataToSave = _mapper.Map<ETramitacio>(eTramitacio);
+        //    _context.ETramitacios.Add(dataToSave);
+        //}
     }
 }

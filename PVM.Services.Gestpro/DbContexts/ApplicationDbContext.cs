@@ -8,6 +8,11 @@ namespace PVM.Services.Gestpro.DbContexts
     {
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        //public ApplicationDbContext(DbContextOptions options) : base(options)
+        //{
+        //}
+
+        //public ApplicationDbContext(ApplicationDbContext context, DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         //protected override void OnModelCreating(ModelBuilder builder)
         //{
