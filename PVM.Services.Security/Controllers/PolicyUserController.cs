@@ -5,7 +5,7 @@ using PVM.Services.Security.Services.AuthService;
 using PVM.Services.Security.Services.PolicyUserService;
 using PVM.SharedLibrary;
 
-namespace PVM.Services.Security.Controllers
+namespace PVM.Service.Security.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

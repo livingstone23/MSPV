@@ -15,7 +15,7 @@ using PVM.Services.Security.Model.Dto;
 using PVM.Services.Security.Utility;
 using Microsoft.Extensions.Options;
 
-namespace PVM.Services.Security.Controllers.v1
+namespace PVM.Service.Security.Controllers.v1
 {
     [Route("api/v1/account")]
     [ApiController]

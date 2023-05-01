@@ -46,7 +46,7 @@ namespace PVM.Services.Gestpro.Controllers.v1
 
 
         [HttpGet("ETramitacioPagination", Name = "ETramitacioPagination")]
-        public async Task<ActionResult<ServiceResponse<ETramitacioSearchResult>>> ETramitacioPagination([FromQuery] PaginationDTO paginationDto)
+        public async Task<ActionResult<ServiceResponse<ETramitacioSearchResult>>> ETramitacioPagination([FromBody] PaginationDTO paginationDto)
         {
 
             var result = await _etramitacioService.SearchETramitacio(paginationDto);

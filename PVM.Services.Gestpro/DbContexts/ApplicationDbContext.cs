@@ -7,6 +7,12 @@ namespace PVM.Services.Gestpro.DbContexts
     public class ApplicationDbContext : DbContext
     {
 
+        //Constructor requerido para las pruebas unitarias.
+        public ApplicationDbContext()
+        {
+            
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         //public ApplicationDbContext(DbContextOptions options) : base(options)
         //{
@@ -32,15 +38,15 @@ namespace PVM.Services.Gestpro.DbContexts
 
         //public DbSet<ETramitacio> ETramitacios { get; set; }
 
-        public DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
 
-        public DbSet<EstatTramitacio> EstatTramitacios { get; set; }
+        public virtual DbSet<EstatTramitacio> EstatTramitacios { get; set; }
 
-        public DbSet<EstatTramitacioMestre> EstatTramitacioMestres { get; set; }
+        public virtual DbSet<EstatTramitacioMestre> EstatTramitacioMestres { get; set; }
 
-        public DbSet<ETramitacio> ETramitacios { get; set; }
+        public virtual DbSet<ETramitacio> ETramitacios { get; set; }
 
-        public DbSet<Register> Registers { get; set; }
+        public virtual DbSet<Register> Registers { get; set; }
         
 
 

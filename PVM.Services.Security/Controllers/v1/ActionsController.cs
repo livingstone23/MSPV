@@ -5,7 +5,7 @@ using PVM.Services.Security.Model.Dto;
 using PVM.Services.Security.Services.ActionService;
 using PVM.SharedLibrary.Models;
 
-namespace PVM.Services.Security.Controllers.v1
+namespace PVM.Service.Security.Controllers.v1
 {
     [Route("api/v1/actionsL")]
     [ApiController]
