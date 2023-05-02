@@ -35,8 +35,8 @@ namespace PVM.Services.Gestpro.Controllers.v1
 
 
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<List<RegisterDto>>>> GetActions(int id)
+        [HttpGet("ETramitacioById",Name= "ETramitacioById/{id}")]
+        public async Task<ActionResult<ServiceResponse<List<RegisterDto>>>> GetActions([FromQuery] int id)
         {
 
             var response = await _etramitacioService.GetEtramitacioById(id);
@@ -46,7 +46,7 @@ namespace PVM.Services.Gestpro.Controllers.v1
 
 
         [HttpGet("ETramitacioPagination", Name = "ETramitacioPagination")]
-        public async Task<ActionResult<ServiceResponse<ETramitacioSearchResult>>> ETramitacioPagination([FromBody] PaginationDTO paginationDto)
+        public async Task<ActionResult<ServiceResponse<ETramitacioSearchResult>>> ETramitacioPagination([FromQuery] PaginationDTO paginationDto)
         {
 
             var result = await _etramitacioService.SearchETramitacio(paginationDto);

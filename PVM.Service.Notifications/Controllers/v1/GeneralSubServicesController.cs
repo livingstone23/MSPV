@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PVM.Service.Notifications.Model.Dto;
-using PVM.Service.Notifications.Services.GeneralService;
 using PVM.Service.Notifications.Services.GeneralSubservice;
 using PVM.SharedLibrary.Models;
 
 namespace PVM.Service.Notifications.Controllers.v1
 {
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/generalsubservice")]
     [ApiController]
     public class GeneralSubServicesController : ControllerBase
     {

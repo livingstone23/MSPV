@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest Name="PVM.WebPkg"
+                 Version="1.0.0"
+                 xmlns="http://schemas.microsoft.com/2011/01/fabric"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ServiceTypes>
+    <!-- El nombre del tipo de servicio.
+         El atributo UseImplicitHost indica que se trata de un servicio de invitado. -->
+    <StatelessServiceType ServiceTypeName="PVM.WebType" UseImplicitHost="true" />
+  </ServiceTypes>
+
+  <!-- El paquete de código es el archivo ejecutable del servicio. -->
+  <CodePackage Name="Code" Version="1.0.0">
+    <EntryPoint>
+      <!-- Siga este vínculo para obtener más información sobre la implementación de contenedores de Windows en Service Fabric: https://aka.ms/sfguestcontainers. -->
+      <ContainerHost>
+        <ImageName>pvm.web:dev</ImageName>
+      </ContainerHost>
+    </EntryPoint>
+    <!-- Pase variables de entorno al contenedor: -->
+    <!--
+    <EnvironmentVariables>
+      <EnvironmentVariable Name="VariableName" Value="VariableValue"/>
+    </EnvironmentVariables>
+    -->
+  </CodePackage>
+
+  <!-- El paquete de configuración es el contenido del directorio Config de PackageRoot que contiene un conjunto de valores
+       de configuración personalizados para el servicio. Este conjunto tiene número de versión y se puede actualizar por separado. -->
+  <ConfigPackage Name="Config" Version="1.0.0" />
+
+  <Resources>
+    <Endpoints>
+      <!-- El cliente de escucha de comunicación usa este punto de conexión para obtener el puerto en el que
+           debe escuchar. Tenga en cuenta que, si el servicio está particionado, este puerto se comparte
+           con réplicas de diferentes particiones que se ponen en el código. -->
+      <Endpoint Protocol="http" Name="PVM.WebTypeEndpoint" Type="Input" Port="8241" />
+    </Endpoints>
+  </Resources>
+</ServiceManifest>

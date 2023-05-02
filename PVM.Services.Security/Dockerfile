@@ -1,0 +1,23 @@
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+COPY ["PVM.Services.Security/PVM.Service.Security.csproj", "PVM.Services.Security/"]
+COPY ["PVM.SharedLibrary/PVM.SharedLibrary.csproj", "PVM.SharedLibrary/"]
+RUN dotnet restore "PVM.Services.Security/PVM.Service.Security.csproj"
+COPY . .
+WORKDIR "/src/PVM.Services.Security"
+RUN dotnet build "PVM.Service.Security.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "PVM.Service.Security.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "PVM.Service.Security.dll"]

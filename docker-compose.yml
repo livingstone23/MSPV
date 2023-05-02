@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+  pvm.service.gestpro:
+    image: ${DOCKER_REGISTRY-}pvmservicegestpro
+    build:
+      context: .
+      dockerfile: PVM.Services.Gestpro/Dockerfile
+
+  
+  pvm.service.security:
+    image: ${DOCKER_REGISTRY-}pvmservicesecurity
+    build:
+      context: .
+      dockerfile: PVM.Services.Security/Dockerfile
+
+  pvm.service.notifications:
+    image: ${DOCKER_REGISTRY-}pvmservicenotifications
+    build:
+      context: .
+      dockerfile: PVM.Service.Notifications/Dockerfile
+
+  pvm.gateway:
+    image: ${DOCKER_REGISTRY-}pvmgateway
+    build:
+      context: .
+      dockerfile: PVM.Gateway/Dockerfile

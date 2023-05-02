@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PVM.Service.Notifications.Model.Dto;
-using PVM.Service.Notifications.Services.GeneralOfficeUserService;
 using PVM.Service.Notifications.Services.GeneralService;
 using PVM.SharedLibrary.Models;
 

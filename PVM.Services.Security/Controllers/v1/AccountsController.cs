@@ -14,6 +14,7 @@ using PVM.Services.Security.Model;
 using PVM.Services.Security.Model.Dto;
 using PVM.Services.Security.Utility;
 using Microsoft.Extensions.Options;
+using PVM.Services.Security;
 
 namespace PVM.Service.Security.Controllers.v1
 {
