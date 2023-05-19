@@ -5,3 +5,4 @@ Is a project with .Net 7, Microservice Architectura and Using Gateway
 -Front End with Blazor
 -MudBlazor
 -Identity
+-Docker
