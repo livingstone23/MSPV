@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace PVM.Service.OCR.Controllers
+namespace PVM.Service.OCR.Controllers.v1
 {
+    [Route("api/v1/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

@@ -4,7 +4,7 @@ using PVM.Services.Gestpro.Model.Dto;
 using PVM.Services.Gestpro.Services.ClientService;
 using PVM.SharedLibrary.Models;
 
-namespace PVM.Services.Gestpro.Controllers.v1
+namespace PVM.Service.Gestpro.Controllers.v1
 {
     [Route("api/v1/clients")]
     [ApiController]

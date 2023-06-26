@@ -6,7 +6,7 @@ using PVM.Services.Gestpro.Services.ClientService;
 using PVM.Services.Gestpro.Services.EstatTramitacioMestre;
 using PVM.SharedLibrary.Models;
 
-namespace PVM.Services.Gestpro.Controllers.v1
+namespace PVM.Service.Gestpro.Controllers.v1
 {
     [Route("api/v1/EstatTramitacioMestres")]
     [ApiController]
