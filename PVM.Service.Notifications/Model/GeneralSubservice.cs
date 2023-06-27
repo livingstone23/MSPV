@@ -6,8 +6,6 @@ namespace PVM.Service.Notifications.Model
     [Table("General-Subservice", Schema = "dbo")]
     public class GeneralSubservice
     {
-
-
         [Key]
         public Guid Oid { get; set; }
         public DateTime? LastChange { get; set; }

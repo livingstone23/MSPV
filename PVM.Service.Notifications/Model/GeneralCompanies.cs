@@ -1,7 +1,12 @@
-﻿namespace PVM.Service.Notifications.Model
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PVM.Service.Notifications.Model
 {
-    public class General_Companies
+    [Table("General-Companies", Schema = "dbo")]
+    public class GeneralCompanies
     {
+        [Key]
         public Guid Oid { get; set; }
         public DateTime LastChange { get; set; }
         public Guid LastUser { get; set; }

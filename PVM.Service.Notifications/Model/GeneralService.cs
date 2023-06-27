@@ -7,8 +7,6 @@ namespace PVM.Service.Notifications.Model
     public class GeneralService
     {
 
-
-
         [Key]
         public Guid Oid { get; set; }
         public DateTime? LastChange { get; set; }

@@ -1,7 +1,12 @@
-﻿namespace PVM.Service.Notifications.Model
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PVM.Service.Notifications.Model
 {
+    [Table("PermissionPolicyUser", Schema = "dbo")]
     public class PermissionPolicyUser
     {
+        [Key]
         public Guid Oid { get; set; }
         public string StoredPassword { get; set; }
         public bool ChangePasswordOnFirstLogon { get; set; }
