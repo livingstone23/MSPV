@@ -23,7 +23,7 @@ builder.Services.AddMudServices();
 
 //var ApiRoute = builder.Configuration.GetSection("");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7035/") });
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7010/") });
 
 
 

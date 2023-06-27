@@ -28,8 +28,8 @@
         public const string Local_UserDetails = "User Details";
 
 
-        public static string ApiNotifications = "https://localhost:7141";
-        public static string ApiSecurity = "https://localhost:7035";
+        public static string ApiNotifications = "https://localhost:7040";
+        public static string ApiSecurity = "https://localhost:7010";
 
     }
 }
