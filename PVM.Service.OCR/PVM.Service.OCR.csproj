@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="pythonTest\" />
+    <Folder Include="pythonTest\venv\" />
     <Folder Include="Python\" />
   </ItemGroup>
 
