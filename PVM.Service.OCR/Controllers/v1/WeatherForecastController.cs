@@ -1,4 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
+using IronPython.Hosting;
+using Microsoft.Scripting;
+using Microsoft.Scripting.Hosting;
+using System.ComponentModel.DataAnnotations;
 
 namespace PVM.Service.OCR.Controllers.v1
 {
@@ -18,7 +23,8 @@ namespace PVM.Service.OCR.Controllers.v1
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+
+        [HttpGet("GetWeatherForecast", Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
@@ -29,5 +35,32 @@ namespace PVM.Service.OCR.Controllers.v1
             })
             .ToArray();
         }
+
+
+
+        [HttpGet("GetSuma", Name = "GetSuma")]
+        public ActionResult GetSuma([FromQuery] ValueDTO values)
+        {
+
+            string pathpy = @"C:\git\mspv\PVM.Service.OCR\pythonTest\dummy.py";
+            ScriptRuntime py = Python.CreateRuntime();
+            dynamic pyProgram = py.UseFile(pathpy);
+
+            var result = pyProgram.suma(values.ValueA, values.ValueB);
+            return Ok(result);
+
+        }
+
+
+    }
+
+    public class ValueDTO
+    {
+       
+        [Required(ErrorMessage = "Value is required")]
+        public int ValueA { get; set; }
+
+        [Required(ErrorMessage = "Value is required")]
+        public int ValueB { get; set; }
     }
 }
