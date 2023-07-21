@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PVM.Service.OCR.DbContexts;
+using PVM.Service.OCR.Services.EnablePython;
 using PVM.Service.OCR.Utility;
 
 namespace PVM.Service.OCR
@@ -53,6 +54,7 @@ namespace PVM.Service.OCR
 
             //Habilitando AutoMapper
             services.AddAutoMapper(typeof(Startup));
+            services.AddScoped<IEnablePython, EnablePython>();
 
 
             //Seccion para Add Autehntication to the API
