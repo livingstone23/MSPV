@@ -2,6 +2,6 @@
 {
     public interface IEnablePython
     {
-        Task<int> InitializeService();
+        Task InitializeService();
     }
 }
