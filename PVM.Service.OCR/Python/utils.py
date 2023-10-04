@@ -1,12 +1,15 @@
-import re
+from datetime import datetime
 import pdf2image as pdf2i
-import os
-import numpy as np
-import cv2
-import logging
 from shutil import rmtree
+from pathlib import Path
+import configparser
 import pytesseract
-import helper
+import numpy as np
+import logging
+import ctypes
+import cv2
+import sys
+import os
 
 
 # Variables globales
@@ -14,6 +17,53 @@ top_corner = [[0, 0]]
 bottom_corner = [[0, 0]]
 draw = False
 undo = False
+
+
+
+# Método para leer la configuración dentro del config
+def read_config():
+    config = configparser.ConfigParser()
+    #config.read(os.path.abspath('config.ini'))
+    config.read("C:\Otros\mspv2\PVM.Service.OCR\Python\config.ini")
+    return config
+
+
+# Establece la dirección de ejecución para la librería de Tesseract-OCR
+def setup_tesseract_ocr():
+    pytesseract.pytesseract.tesseract_cmd = os.path.abspath(r'.\Python\tesseract-ocr\tesseract.exe')
+    logging.info('PyTesseract set - ' + str(pytesseract.get_tesseract_version()))
+
+
+# Inicialización del log para esta ejecución
+def setup_logger():
+    config = read_config()
+    log_file_path = config.get('Logger', 'logfilepath')
+    if not os.path.exists(log_file_path):
+        os.mkdir(log_file_path)
+    log_path = log_file_path + datetime.today().strftime('%Y-%m-%d') + '_' + config.get('Logger', 'logfilename') + '.log'
+    if not os.path.exists(log_path):
+        Path(log_path).touch(exist_ok=True)
+
+    logging.basicConfig(filename=log_path,
+                        encoding='utf-8',
+                        level=logging.DEBUG,
+                        format='%(asctime)s - %(message)s')
+    # Sacar la salida estandar por el log
+    logging.StreamHandler(sys.stdout)
+    # Sacar la salida de error por log
+    logging.StreamHandler(sys.stderr)
+
+    ## Para escribir un mensaje de log nuevo usar <<logging.info('Línea del log')>>
+    logging.info('INICIO--Logger set')
+
+
+# Obtiene el alto y ancho de la pantalla
+def screen_dim():
+    user32 = ctypes.windll.user32
+    user32.SetProcessDPIAware()
+    width, height = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+    dims = [width, height]
+    return dims
 
 
 # Convierte los documentos pdf a imágenes
@@ -91,12 +141,15 @@ def draw_rectangle(action, x, y, flags, *userdata):
         draw = True
 
 
+# Escala una imagen en relación con el porcentaje dado
 def resize_img(img, scale_percent):
-    # Escala una imagen en relación con el porcentaje dado
+    # Calcula el ancho y alto correspondiente
     width = int(img.shape[1] * scale_percent / 100)
     height = int(img.shape[0] * scale_percent / 100)
+    # Lo incluye en una tupla
     dim = (width, height)
-    # resize image
+
+    # Aplica el reescalado
     resized = cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
     return resized
 
@@ -109,8 +162,8 @@ def rotate_img(image, angle):
   return rotated
 
 
-def mouse_crop(img):
-    # Muestra la imagen de la factura y permite hacer un recorte de la misma.
+# Muestra la imagen de la factura y permite hacer un recorte de la misma.
+def mouse_crop(img): 
     global top_corner, bottom_corner, draw, undo
     # Prepara la ventana donde se va a mostrar la imagen
     winname = 'Seleccion a procesar | Enter para aceptar'
@@ -119,10 +172,11 @@ def mouse_crop(img):
     # Crea el trigger que va a activarse 
     cv2.setMouseCallback(winname, draw_rectangle)
 
-    screen = helper.screen_dim()
+    screen = screen_dim()
     img_r, resized = resize_aspect_ratio(img, height=screen[1]-50)
     img_r_cache = img_r.copy()
 
+    # Bucle infinito de deteción de ratón en esta pantalla
     while (1):
         if undo:
             img_r = img_r_cache.copy()
@@ -193,16 +247,19 @@ def text_save(text, name, path):
         f.close()
 
 
+# Convierte la imagen dada a escala de grises
 def convert_grayscale(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     return img
 
 
+# Difumina la imagen dada aplicandole un desenfoque
 def blur(img, amount):
     img = cv2.medianBlur(img, amount)
     return img
 
 
+# Convierte los píxeles de la imagen a blanco o a negro siguiendo una función ponderada
 def threshold(img):
     img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     return img

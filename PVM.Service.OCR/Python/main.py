@@ -1,37 +1,30 @@
 from tabulate import tabulate
-import pandas as pd
-import numpy as np
-import threading
 import logging
-import helper
 import utils
 import json
 import OCR
-import cv2
-import AI
-import re
 import os
 
 
 def main():
     # Inicializando el logger y la configuración de Tesseract
-    helper.setup_logger()
-    helper.setup_tesseract_ocr()
+    utils.setup_logger()
+    utils.setup_tesseract_ocr()
     # Cargar configuracion
-    config = helper.read_config()
+    config = utils.read_config()
     try:
         # Obtener el directorio especificado en la configuración
         dir = config.get('Pdfs', 'directorio')
         if dir is not None:
             # Generar las imagenes de las facturas
-            generadas, paginas = AI.images_generator(dir)
+            generadas, paginas = OCR.images_generator(dir)
             if generadas:
                 # cargar imágenes generadas
                 img_dir = dir + r'\images'
                 images, img_names = utils.load_images_from_folder(img_dir)
 
             # Crear un dataframe con la información estructurada de la factura
-            df = AI.structure_creation()
+            df = OCR.structure_creation()
             print(tabulate(df, headers='keys', tablefmt='psql'))
             print(df)
             # Control de documentos
@@ -119,6 +112,35 @@ def main():
         return False
 
 
+def transform_pdf(GId, pdf_path, plantilla):
+    ...
+    
+
+    extract(GId, imagenes, nombres, plantilla)
+    
+    return 
+
+def extract(GId, imagenes, nombres, plantilla):
+    
+    try:
+        ...
+        
+        # Inicializando el logger y la configuración de Tesseract
+        utils.setup_logger()
+        utils.setup_tesseract_ocr()
+        # Cargar configuracion
+        config = utils.read_config()
+        
+        ...
+
+    except Exception as e:
+        logging.error(f'Error en el proceso OCR ({e})')
+        print('Imagenes borradas:')
+        print(utils.dispose_images(img_dir))
+        print("Error, excepción: " + e)
+        return False
+
+
 def testing():
     ...
 
@@ -126,7 +148,7 @@ def testing():
 # Main entrance
 if __name__ == '__main__':
     #main()
-    helper.setup_logger()
-    helper.setup_tesseract_ocr()
+    utils.setup_logger()
+    utils.setup_tesseract_ocr()
     #templateGenerator.init()
     #testing()

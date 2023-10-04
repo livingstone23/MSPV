@@ -1,14 +1,13 @@
-import cv2
+from pathlib import Path
+import pandas as pd
 import numpy as np
-import os
-import re
-import logging
 import pytesseract
+import logging
 import easyocr
 import utils
-import helper
-from pathlib import Path
-import matplotlib.pyplot as plt
+import cv2
+import os
+import re
 
 
 # Preprocesamiento para imagen // Misma salida, imagen recortada pxcut pixeles
@@ -155,7 +154,7 @@ def lineas_entrada_salto(img, pag, img_dir, i, lineas):
         lineas = {}
         j = 1
     totales = False
-    config = helper.read_config()
+    config = utils.read_config()
     psm = 7
     key = config.get('Lineas entrada', 'Linea')
     coordIni, coordFin, modo = utils.coord_processing(key)
@@ -232,7 +231,7 @@ def lineas_entrada_columna(img, c, lineas):
     imgOut, coords = utils.mouse_crop(img)
 
     if coords != [[[0, 0]],[[0, 0]]]:
-        config = helper.read_config()
+        config = utils.read_config()
         line_details = {}
         for name, key in config.items('Detalles entrada'):
             coordIni, coordFin, modo  = utils.coord_processing(key)
@@ -257,3 +256,66 @@ def lineas_entrada_columna(img, c, lineas):
                     lineas[concept] = {name: line}
         c += j+1
     return lineas, c, coords
+
+
+# Definición de dataframe a configurar
+def structure_creation():
+    COLUMN_NAMES = ['Factura Nº', 'Total', 'Fecha Factura']
+    df = pd.DataFrame(columns=COLUMN_NAMES)
+    return df
+
+
+# Entrada del generado de imágenes a partir de pdfs
+def images_generator(directorio_pdfs):
+    logging.info('Directorio: ' + directorio_pdfs)
+    try:
+        pag_numbers = []
+        with os.scandir(directorio_pdfs) as pdfs:
+            for pdf in pdfs:
+                if pdf.name.endswith('.pdf'):
+                    logging.info('Pdf a tratar - ' + str(Path(pdf.path)))
+                    pag_numbers.append(extract_image(Path(pdf.path), 0))
+        return True, pag_numbers
+    except Exception as e:
+        logging.error(f'Imágenes no generadas ({e})')
+        return False
+
+
+# Extrae y estandariza como imagen la primera página de un pdf
+def extract_image(pdfPath, pags=1):
+    # pags = 0 extrae todas las imágenes del pdf
+    img = utils.pdf_to_images(pdfPath, pags)
+    logging.info('Inicio conversión pdf')
+    # Guardar imagen
+    for i, output in enumerate(img):
+        images_dir = os.path.dirname(pdfPath) + r'\images'
+        if not os.path.isdir(images_dir):
+            os.mkdir(images_dir)
+        cv2.imwrite((images_dir + r'\\' + Path(pdfPath).stem + f'_{i}' + '.tiff'), np.array(output))
+        logging.info('Fin pdf')
+    return i
+
+
+'''
+def modelo_convolucional():
+    model = tf.keras.models.Sequential()
+
+    # Añadimos la primera capa
+    model.add(tf.keras.layers.Conv2D(64,(3,3), activation = 'relu', input_shape = (128,128,3)))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size = (2,2)))
+
+    # Añadimos la segunda capa
+    model.add(tf.keras.layers.Conv2D(64,(3,3), activation = 'relu'))
+    model.add(tf.keras.layers.MaxPooling2D(pool_size = (2,2)))
+
+    # Hacemos un flatten para poder usar una red fully connected
+    model.add(tf.keras.layers.Flatten())
+    model.add(tf.keras.layers.Dense(64, activation='relu'))
+
+    # Añadimos una capa softmax para que podamos clasificar las imágenes
+    model.add(tf.keras.layers.Dense(2, activation='softmax'))
+
+    model.compile(optimizer="rmsprop",
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+'''

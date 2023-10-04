@@ -29,9 +29,6 @@ namespace PVM.Service.OCR.Services.EnablePython
             {
                 throw new Exception($"Python initialization Exception, {e.Message}", e);
             }
-
-            //throw new NotImplementedException();
-                 
         }
     }
 }

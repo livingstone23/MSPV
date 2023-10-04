@@ -31,9 +31,31 @@ namespace PVM.Service.OCR.Controllers.v1
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        
 
 
+        [HttpGet("PythonOCRInference", Name = "PythonOCRInference")]
+        public ActionResult PythonOCRInference()
+        {
+            // Enable Python service
+            _enablePython.InitializeService();
+
+            //Inferir OCR
+            using (Py.GIL()) // Acquire the Python GIL (Global Interpreter Lock)
+            {
+                dynamic os = Py.Import("os");
+                dynamic sys = Py.Import("sys");
+
+                string filePath = "C:\\Otros\\mspv2\\PVM.Service.OCR\\Python\\main.py";
+                sys.path.append(os.path.dirname(filePath));
+                dynamic main = Py.Import(Path.GetFileNameWithoutExtension(filePath));
+
+                string images_path = @"C:\\Otros\\OCR py\\DATASET clasificador\\Imagenes de Upload test";
+
+                main.transform_pdf(1, images_path, "plantilla");
+
+                return Ok();
+            }
+        }
 
 
         [HttpGet("GetWeatherForecast", Name = "GetWeatherForecast")]
@@ -70,6 +92,8 @@ namespace PVM.Service.OCR.Controllers.v1
                 filePath = "C:\\Otros\\mspv2\\PVM.Service.OCR\\Python\\main.py";
                 sys.path.append(os.path.dirname(filePath));
                 dynamic main = Py.Import(Path.GetFileNameWithoutExtension(filePath));
+
+                //@"C:\\Otros\\OCR py\\DATASET clasificador\\Imagenes de Upload test"
 
                 main.InvokeMethod("main");
 
