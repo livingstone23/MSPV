@@ -1,0 +1,67 @@
+[
+	{"GUID":"D6AB6E5E-0E47-4666-8B49-FFC44345EAF7"},
+	{
+	"content":"nombre_documento",
+	"groups": 
+		[
+			{
+			"group": "Campos_cabecera",
+			"fields":
+				[
+					{
+					"name": "Direccion_entrega",
+					"value": "ejemplo1"
+					},
+					{
+					"name": "Direccion_facturacion",
+					"value": "ejemplo2"
+					},
+					{
+					"name": "N_cliente",
+					"value": 42
+					},
+					{
+					"name": "NIF-DNI",
+					"value": "ejemplo3"
+					}
+				]
+			}
+			{
+			"group": "Lineas_entrada",
+			"fields":
+				[
+					{
+					"name": "concepto1",
+					"value": 
+						[
+							{
+							"name": "Referencia",
+							"value": 22
+							},
+							{
+							"name": "Descripcion",
+							"value": "copceptualidad"
+							},
+							{
+							"name": "Cantidad",
+							"value": 2
+							},
+							{
+							"name": "Precio_unitario",
+							"value": 3
+							},
+							{
+							"name": "Total",
+							"value": 42
+							},
+							{
+							"name": "IVA",
+							"value": 21
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+]

@@ -1,5 +1,4 @@
 from pathlib import Path
-import pandas as pd
 import numpy as np
 import pytesseract
 import logging
@@ -21,10 +20,12 @@ def preprocessed_1(img):
 
 # Preprocesamiento para imagen // Redimensionada, blanco y negro, aumentada nitidez
 def preprocessed_2(img):
+    # Redimensionar la imagen al 90% de su tamaño original
     img = cv2.resize(img, None, fx=0.9, fy=0.9)
+    # Convertir la imagen a escala de grises
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    adaptative_threshold = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 185,
-                                                 19)  # 85, 35 // 185, 18 // 121, 19 // 11, 2
+    # Aplicar un umbral adaptativo a la imagen en escala de grises utilizando el método Gaussiano
+    adaptative_threshold = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 185, 19)  # 85, 35 // 185, 18 // 121, 19 // 11, 2
     pxcut = 40
     # Recortar imagen[fila_inicial:fila_final, columna_inicial:columna_final]
     # // pxcut = nºde píxeles a recortar de los bordes
@@ -33,9 +34,10 @@ def preprocessed_2(img):
 
 # Preprocesamiento para imagen // Blanco y negro, Representar imagen con únicamente 2 colores
 def preprocessed_3(img):
+    # Convertir la imagen a escala de grises
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    adaptative_threshold = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11,
-                                                 2)
+    # Aplicar un umbral adaptativo a la imagen en escala de grises utilizando el método Gaussiano
+    adaptative_threshold = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
     pxcut = 20
     # Recortar imagen[fila_inicial:fila_final, columna_inicial:columna_final]
     # // pxcut = nºde píxeles a recortar de los bordes
@@ -76,13 +78,13 @@ def ocr_processing(path):
     print(utils.dispose_images(img_dir))
 
 
-# Función de procesado de imágenes a texto
-def transcription(img, oem, psm):
+# Función de procesado de imágenes a texto (FUNCIÓN PRINCIPAL DE INFERENCIA OCR, añadir psm para mayor efectividad)
+def transcription(img, oem, psm, lng='spa'):
     # -oem: Specify OCR Engine mode // 3 = Default, based on what is available.
     # -psm: Set Tesseract to only run a subset of layout analysis and assume a certain form of image
     #    // 3 = Fully automatic page segmentation, but no OSD. (Default)
     custom_config = rf'--oem {oem} --psm {psm}'
-    text = pytesseract.image_to_string(img, lang='spa', config=custom_config)
+    text = pytesseract.image_to_string(img, lang=lng, config=custom_config)
     return text
 
 
@@ -108,6 +110,7 @@ def text_comparator(texts):
         return text
 
 
+# Detecta y transcribe bloques de texto probablemente presentes, proporcionando el contenido extraído de esos bloques
 def coordinates_detection(img):
     text_coordinates = detect_text_blocks(img)
     texts = []
@@ -120,7 +123,7 @@ def coordinates_detection(img):
             cropped = img[y_min: y_max, x_min: x_max]
             text = transcription(cropped, 3, 3)
             texts.append(text)
-            '''
+    '''
             img = cv2.rectangle(img, top_left, bottom_right, (113,30,147), 3)
             img = cv2.putText(img, text, bottom_right, font, 0.5, (113,30,147), 2)
             print("{}: {}".format(coord, text))
@@ -128,7 +131,7 @@ def coordinates_detection(img):
     plt.imshow(img)
     while not plt.waitforbuttonpress():
         plt.imshow(img)
-    #'''
+    '''
     return texts
 
 
@@ -140,7 +143,7 @@ def detect_text_blocks(imagen):
     return text_coordinates
 
 
-# Función que rota la imagen dado un angulo concreto
+# Función que detecta la rotación de una imagen
 def image_rotation_angle(img):
     osd = pytesseract.image_to_osd(img)
     angle = re.search(r'(?<=Rotate: )\d+', osd).group(0)
@@ -226,7 +229,7 @@ def lineas_entrada(img, c, lineas):
     return lineas, c
 
 
-# 
+# Esta función se encarga de procesar una imagen para extraer líneas de texto de una columna específica y con los resultados de la extracción
 def lineas_entrada_columna(img, c, lineas):
     imgOut, coords = utils.mouse_crop(img)
 
@@ -258,15 +261,51 @@ def lineas_entrada_columna(img, c, lineas):
     return lineas, c, coords
 
 
-# Definición de dataframe a configurar
-def structure_creation():
-    COLUMN_NAMES = ['Factura Nº', 'Total', 'Fecha Factura']
-    df = pd.DataFrame(columns=COLUMN_NAMES)
-    return df
+# Entrada del generado de imágenes a partir de pdfs (extrae las imagenes y las nombra con el número de página al final del nombre)
+def generador_imagenes(pdf_path):
+    logging.info('Directorio pdf: ' + pdf_path)
+    try:
+        # Si es un único pdf
+        if pdf_path[-4:] == ('.pdf'):
+            logging.info('Pdf a tratar - ' + str(Path(pdf_path)))
+            images, names = extract_images(Path(pdf_path))
+        # Si son varios pdfs
+        else:
+            images = []
+            names = []
+            # Lista todos los pdfs que contiene la ruta y los va procesando uno a uno
+            with os.scandir(pdf_path) as pdfs:
+                for pdf in pdfs:
+                    if pdf.name.endswith('.pdf'):
+                        logging.info('Pdf a tratar - ' + str(Path(pdf.path)))
+                        image, name = extract_images(Path(pdf.path))
+                        images.append(image)
+                        names.append(name)
+        return images, names
+
+    except Exception as e:
+        logging.error(f'Imágenes no generadas ({e})')
 
 
-# Entrada del generado de imágenes a partir de pdfs
-def images_generator(directorio_pdfs):
+# Extrae y estandariza como imagen la primera página de un pdf
+def extract_images(pdfPath, pags=0):
+    # pags = 0 extrae todas las imágenes del pdf; pags = n trata de extraer las n primeras páginas
+    images = []
+    names = []
+    img = utils.pdf_to_images(pdfPath, pags)
+    logging.info('Inicio conversión pdf')
+    
+    # Guardar imagen
+    for i, output in enumerate(img):
+        images.append(np.array(output))
+        names.append(Path(pdfPath).stem + f'_{i}')
+    
+    logging.info('pdf convertido exitosamente')
+    return images, names
+
+
+# Método antiguo de entrada del generado de imágenes a partir de pdfs
+def images_generator_old(directorio_pdfs):
     logging.info('Directorio: ' + directorio_pdfs)
     try:
         pag_numbers = []
@@ -274,18 +313,18 @@ def images_generator(directorio_pdfs):
             for pdf in pdfs:
                 if pdf.name.endswith('.pdf'):
                     logging.info('Pdf a tratar - ' + str(Path(pdf.path)))
-                    pag_numbers.append(extract_image(Path(pdf.path), 0))
+                    pag_numbers.append(extract_image_old(Path(pdf.path), 0))
         return True, pag_numbers
     except Exception as e:
         logging.error(f'Imágenes no generadas ({e})')
         return False
 
 
-# Extrae y estandariza como imagen la primera página de un pdf
-def extract_image(pdfPath, pags=1):
+# Método antiguo para extrae y estandariza como imagen la primera página de un pdf
+def extract_image_old(pdfPath, pags=1):
     # pags = 0 extrae todas las imágenes del pdf
     img = utils.pdf_to_images(pdfPath, pags)
-    logging.info('Inicio conversión pdf')
+    logging.info('Inicio conversión pdfiuytre')
     # Guardar imagen
     for i, output in enumerate(img):
         images_dir = os.path.dirname(pdfPath) + r'\images'

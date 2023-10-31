@@ -24,7 +24,7 @@ undo = False
 def read_config():
     config = configparser.ConfigParser()
     #config.read(os.path.abspath('config.ini'))
-    config.read("C:\Otros\mspv2\PVM.Service.OCR\Python\config.ini")
+    config.read(r'.\Python\config.ini')
     return config
 
 
@@ -111,7 +111,7 @@ def load_images_from_folder(folder):
     return images, img_names
 
 
-# Funcion que es llamada cada input de ratón para activar el dibujado de un rectángulo
+# Función que es llamada cada input de ratón para activar el dibujado de un rectángulo
 def draw_rectangle(action, x, y, flags, *userdata):
     # Referencing global variables
     print(x, ' ', y)
@@ -259,7 +259,7 @@ def blur(img, amount):
     return img
 
 
-# Convierte los píxeles de la imagen a blanco o a negro siguiendo una función ponderada
+# Convierte los píxeles de la imagen a blanco o a negro siguiendo una función ponderada.
 def threshold(img):
     img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     return img

@@ -1,0 +1,211 @@
+[
+	{
+	  "group": "Campos_cabecera",
+	  "fields": [
+		{
+		  "name": "Direccion_entrega",
+		  "x1": 99,
+		  "y1": 365,
+		  "x2": 565,
+		  "y2": 536,
+		  "psm": 3
+		},
+		{
+		  "name": "Direccion_facturacion",
+		  "x1": 959,
+		  "y1": 365,
+		  "x2": 1293,
+		  "y2": 535,
+		  "psm": 3
+		},
+		{
+		  "name": "N_cliente",
+		  "x1": 113,
+		  "y1": 686,
+		  "x2": 211,
+		  "y2": 712,
+		  "psm": 7
+		},
+		{
+		  "name": "NIF-DNI",
+		  "x1": 315,
+		  "y1": 688,
+		  "x2": 443,
+		  "y2": 712,
+		  "psm": 7
+		},
+		{
+		  "name": "Factura",
+		  "x1": 514,
+		  "y1": 688,
+		  "x2": 637,
+		  "y2": 713,
+		  "psm": 7
+		},
+		{
+		  "name": "N_albaran",
+		  "x1": 711,
+		  "y1": 690,
+		  "x2": 823,
+		  "y2": 713,
+		  "psm": 7
+		},
+		{
+		  "name": "Fecha_factura",
+		  "x1": 843,
+		  "y1": 681,
+		  "x2": 971,
+		  "y2": 715,
+		  "psm": 7
+		},
+		{
+		  "name": "Tipo_doc",
+		  "x1": 1243,
+		  "y1": 674,
+		  "x2": 1448,
+		  "y2": 715,
+		  "psm": 7
+		},
+		{
+		  "name": "Modo_pago",
+		  "x1": 516,
+		  "y1": 786,
+		  "x2": 736,
+		  "y2": 820,
+		  "psm": 7
+		},
+		{
+		  "name": "Fecha_vencimiento",
+		  "x1": 845,
+		  "y1": 790,
+		  "x2": 993,
+		  "y2": 819,
+		  "psm": 7
+		}
+	  ]
+	},
+	{
+	  "group": "Lineas entrada",
+	  "fields": [
+		{
+		  "name": "Linea",
+		  "x1": 81,
+		  "y1": 890,
+		  "x2": 1542,
+		  "y2": 930,
+		  "psm": 7
+		}
+	  ]
+	},
+	{
+	  "group": "Detalles entrada",
+	  "fields": [
+		{
+		  "name": "Referencia",
+		  "x1": 90,
+		  "y1": 894,
+		  "x2": 262,
+		  "y2": 944,
+		  "psm": 4
+		},
+		{
+		  "name": "Descripcion",
+		  "x1": 336,
+		  "y1": 897,
+		  "x2": 777,
+		  "y2": 936,
+		  "psm": 4
+		},
+		{
+		  "name": "Cantidad",
+		  "x1": 874,
+		  "y1": 897,
+		  "x2": 959,
+		  "y2": 930,
+		  "psm": 4
+		},
+		{
+		  "name": "Precio_unitario",
+		  "x1": 1021,
+		  "y1": 897,
+		  "x2": 1171,
+		  "y2": 930,
+		  "psm": 4
+		},
+		{
+		  "name": "Total",
+		  "x1": 1271,
+		  "y1": 897,
+		  "x2": 1389,
+		  "y2": 930,
+		  "psm": 4
+		},
+		{
+		  "name": "IVA",
+		  "x1": 1438,
+		  "y1": 897,
+		  "x2": 1532,
+		  "y2": 941,
+		  "psm": 4
+		}
+	  ]
+	},
+	{
+	  "group": "Totales",
+	  "fields": [
+		{
+		  "name": "Total",
+		  "x1": 1274,
+		  "y1": 1490,
+		  "x2": 1398,
+		  "y2": 1801,
+		  "psm": 5
+		}
+	  ]
+	},
+	{
+	  "group": "Detalles totales",
+	  "fields": [
+		{
+		  "name": "Importe_neto",
+		  "x1": 0,
+		  "y1": 0,
+		  "x2": 0,
+		  "y2": 0,
+		  "psm": 0
+		},
+		{
+		  "name": "Suma_IVA",
+		  "x1": 0,
+		  "y1": 0,
+		  "x2": 0,
+		  "y2": 0,
+		  "psm": 0
+		},
+		{
+		  "name": "Total",
+		  "x1": 0,
+		  "y1": 0,
+		  "x2": 0,
+		  "y2": 0,
+		  "psm": 0
+		},
+		{
+		  "name": "Credito_pagado",
+		  "x1": 0,
+		  "y1": 0,
+		  "x2": 0,
+		  "y2": 0,
+		  "psm": 0
+		},
+		{
+		  "name": "Pendiente_pago",
+		  "x1": 0,
+		  "y1": 0,
+		  "x2": 0,
+		  "y2": 0,
+		  "psm": 0
+		}
+	  ]
+	}
+]
